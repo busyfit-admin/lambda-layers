@@ -1,0 +1,32 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: AWS Lambda Layers for SaaS Integrated APIs
+
+
+Parameters:
+  Environment:
+    Type: String
+
+Resources:
+
+  OpenSearchLibLambdaLayer:
+    Type: AWS::Serverless::LayerVersion
+    Properties:
+        CompatibleRuntimes:
+            - python3.9
+            - python3.10
+            - python3.11
+            - python3.12
+        ContentUri: ../layers/open-search-lib/
+        Description: OpenSearch Lambda Layer
+        LayerName: !Sub OpenSearch-Lib-${Environment}
+
+  OpenSearchLibLayerVersionArn:
+    Type: AWS::SSM::Parameter
+    Properties:
+      Name: !Sub /IntegratedAPIs/LambdaLayer/OpenSearchLibLayerVersionArn
+      Description: ARN of the OpenSearch Lambda Layer
+      Type: String
+      Value: !Ref OpenSearchLibLambdaLayer
+
+
